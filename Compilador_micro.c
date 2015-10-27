@@ -1,4 +1,3 @@
-/* Compilador del Lenguaje Micro (Fischer) */ 
 #include <stdio.h> 
 #include <string.h> 
 #include <ctype.h>  
@@ -106,7 +105,8 @@ TOKEN tok = ProximoToken();
 REG_EXPRESION izq, der;  
  switch ( tok )  
  {   
- case ID : /* <sentencia> -> ID := <expresion> #asignar ; */    Identificador(&izq);    
+ case ID : /* <sentencia> -> ID := <expresion> #asignar ; */    
+ Identificador(&izq);    
  Match(ASIGNACION);    
  Expresion(&der);    
  Asignar(izq, der);    
@@ -144,12 +144,14 @@ void ListaIdentificadores(void) {
  } 
 }  
 
-void Identificador(REG_EXPRESION * presul) {  /* <identificador> -> ID #procesar_id */  
+void Identificador(REG_EXPRESION * presul) {  
+ /* <identificador> -> ID #procesar_id */  
  Match(ID);  
  *presul = ProcesarId(); 
 }  
 
-void ListaExpresiones(void) {  /* <listaExpresiones> -> <expresion> #escribir_exp {COMA <expresion> #escribir_exp} */  
+void ListaExpresiones(void) {  
+ /* <listaExpresiones> -> <expresion> #escribir_exp {COMA <expresion> #escribir_exp} */  
  TOKEN t;  
  REG_EXPRESION reg;  
  Expresion(&reg);  
@@ -162,7 +164,8 @@ void ListaExpresiones(void) {  /* <listaExpresiones> -> <expresion> #escribir_ex
  } 
 }  
 
-void Expresion(REG_EXPRESION * presul) {  /* <expresion> -> <primaria> { <operadorAditivo> <primaria> #gen_infijo } */  
+void Expresion(REG_EXPRESION * presul) {  
+ /* <expresion> -> <primaria> { <operadorAditivo> <primaria> #gen_infijo } */  
  REG_EXPRESION operandoIzq, operandoDer;  
  char op[TAMLEX];  
  TOKEN t;  
@@ -196,8 +199,8 @@ void Primaria(REG_EXPRESION * presul)
  } 
 }  
 
-void OperadorAditivo(char * presul) 
-{  /* <operadorAditivo> -> SUMA #procesar_op | RESTA #procesar_op */  
+void OperadorAditivo(char * presul) {  
+ /* <operadorAditivo> -> SUMA #procesar_op | RESTA #procesar_op */  
  TOKEN t = ProximoToken();  
  if ( t == SUMA || t == RESTA )  
  {   
@@ -208,8 +211,8 @@ void OperadorAditivo(char * presul)
 }  
 
 /******************Rutinas Semanticas******************************/  
-REG_EXPRESION ProcesarCte(void) 
-{  /* Convierte cadena que representa numero a numero entero y construye un registro semantico */  
+REG_EXPRESION ProcesarCte(void) {  
+ /* Convierte cadena que representa numero a numero entero y construye un registro semantico */  
  REG_EXPRESION reg;  
  reg.clase = CONSTANTE;  
  strcpy(reg.nombre, buffer);  
@@ -217,8 +220,8 @@ REG_EXPRESION ProcesarCte(void)
  return reg; 
 }  
 
-REG_EXPRESION ProcesarId(void) 
-{  /* Declara ID y construye el correspondiente registro semantico */  
+REG_EXPRESION ProcesarId(void) {  
+ /* Declara ID y construye el correspondiente registro semantico */  
  REG_EXPRESION reg;  
  Chequear(buffer);  
  reg.clase = ID;  
@@ -226,23 +229,23 @@ REG_EXPRESION ProcesarId(void)
  return reg; 
 }  
 
-char * ProcesarOp(void) 
-{  /* Declara OP y construye el correspondiente registro semantico */  
+char * ProcesarOp(void) {  
+ /* Declara OP y construye el correspondiente registro semantico */  
  return buffer; 
 }  
 
-void Leer(REG_EXPRESION in) 
-{  /* Genera la instruccion para leer */  
+void Leer(REG_EXPRESION in) {  
+ /* Genera la instruccion para leer */  
  Generar("Read", in.nombre, "Entera", ""); 
 }
   
-void Escribir(REG_EXPRESION out) 
-{  /* Genera la instruccion para escribir */  
+void Escribir(REG_EXPRESION out) {  
+ /* Genera la instruccion para escribir */  
  Generar("Write", Extraer(&out), "Entera", ""); 
 }  
 
-REG_EXPRESION GenInfijo(REG_EXPRESION e1, char * op, REG_EXPRESION e2) 
-{  /* Genera la instruccion para una operacion infija y construye un registro semantico con el resultado */  
+REG_EXPRESION GenInfijo(REG_EXPRESION e1, char * op, REG_EXPRESION e2) {  
+ /* Genera la instruccion para una operacion infija y construye un registro semantico con el resultado */  
  REG_EXPRESION reg;  
  static unsigned int numTemp = 1;  
  char cadTemp[TAMLEX] ="Temp&";  
@@ -319,8 +322,8 @@ int Buscar(char * id, RegTS * TS, TOKEN * t)
  return 0; 
 } 
  
-void Colocar(char * id, RegTS * TS) 
-{  /* Agrega un identificador a la TS */  
+void Colocar(char * id, RegTS * TS) {  
+ /* Agrega un identificador a la TS */  
  int i = 4;  
  while ( strcmp("$", TS[i].identifi) ) 
    i++;    
@@ -332,8 +335,8 @@ void Colocar(char * id, RegTS * TS)
  } 
 }  
 
-void Chequear(char * s) 
-{  /* Si la cadena No esta en la Tabla de Simbolos la agrega,  y si es el nombre de una variable genera la instruccion */  
+void Chequear(char * s) {  
+ /* Si la cadena No esta en la Tabla de Simbolos la agrega,  y si es el nombre de una variable genera la instruccion */  
  TOKEN t;  
  if ( !Buscar(s, TS, &t) )  
  {   
