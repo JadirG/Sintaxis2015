@@ -70,8 +70,6 @@ void Asignar(REG_EXPRESION izq, REG_EXPRESION der);
 /************************Programa Principal************************/
 int main(int argc, char * argv[]) {
     TOKEN tok;
-    argc = 2;
-    argv[1] = "Sarasa.txt";
     if (argc == 1) {
         printf("Debe ingresar el nombre del archivo fuente en linea de comandos\n");
         return -1;
